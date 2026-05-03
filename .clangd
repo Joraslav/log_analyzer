@@ -1,0 +1,103 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - -std=c++23
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+  Remove:
+    - -Werror
+    - -fmodules-ts
+    - -fmodule-mapper=*
+    - -fdeps-format=*
+
+Index:
+  Background: Build
+  StandardLibrary: true
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  ClangTidy:
+    FastCheckFilter: Strict
+
+Completion:
+  AllScopes: true
+  ArgumentLists: FullPlaceholders
+  HeaderInsertion: IWYU
+  CodePatterns: All
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  Designators: true
+  BlockEnd: true
+  DefaultArguments: true
+  TypeNameLimit: 32
+
+Hover:
+  ShowAKA: false
+
+Documentation:
+  CommentFormat: Doxygen
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_Parser\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_FileAnalyzer\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_ConsoleReport\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_JsonReport\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?src\/io\/FileScanner\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_Aggregator\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?src\/report\/JsonReport\.cpp$
+Diagnostics:
+  Suppress:
+    - misc-use-internal-linkage
+  ClangTidy:
+    Remove:
+      - misc-use-internal-linkage
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_App\.cpp$
+Diagnostics:
+  Suppress:
+    - misc-non-private-member-variables-in-classes
+    - missing-includes

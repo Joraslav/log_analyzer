@@ -1,0 +1,3 @@
+Hello world from log analyzer
+This is a sample text file
+It contains multiple lines and words
