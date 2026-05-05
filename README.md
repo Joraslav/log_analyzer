@@ -2,6 +2,15 @@
 
 Консольная утилита на C++23 для статистического анализа текстовых лог-файлов. Сканирует директорию, считает строки, слова и символы, строит частотный словарь, ищет ключевые слова и выводит результаты в консоль или в JSON.
 
+## Скачать
+
+| Платформа | Пакет |
+| --- | --- |
+| ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white) Ubuntu / Debian (amd64) | [log_analyzer_0.1.2_amd64.deb](https://github.com/Joraslav/log_analyzer/releases/download/v0.1.2/log_analyzer_0.1.2_amd64.deb) |
+| ![Fedora](https://img.shields.io/badge/Fedora-51A2DA?logo=fedora&logoColor=white) Fedora / RHEL (x86\_64) | [log_analyzer-0.1.2-1.x86_64.rpm](https://github.com/Joraslav/log_analyzer/releases/download/v0.1.2/log_analyzer-0.1.2-1.x86_64.rpm) |
+
+[Все релизы →](https://github.com/Joraslav/log_analyzer/releases)
+
 ## Возможности
 
 - Рекурсивный обход директории — находит все файлы с расширениями `.log` и `.txt`
