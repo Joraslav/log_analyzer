@@ -125,8 +125,16 @@ CLI args → FileScanner → FileAnalyzer (×N файлов) → Aggregator → 
 
 ## Тесты
 
+Через скрипт (запуск тестовых бинарников напрямую, без `ctest`):
+
 ```bash
-ctest --test-dir build --output-on-failure
+./scripts/run_tests.sh
+
+# Показать список тестов:
+./scripts/run_tests.sh --list
+
+# Запустить только часть тестов по gtest-фильтру:
+./scripts/run_tests.sh --filter "*Cli*:*Parser*"
 ```
 
 Наборы тестов: `Test_FileScanner`, `Test_Parser`, `Test_FileAnalyzer`, `Test_Aggregator`, `Test_ConsoleReport`, `Test_JsonReport`, `Test_Cli`, `Test_App`.

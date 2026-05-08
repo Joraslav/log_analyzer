@@ -8,12 +8,14 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 namespace {
 
 using namespace domain;
 using namespace report;
 using namespace std::string_literals;
+using namespace std::string_view_literals;
 
 std::filesystem::path TempJsonPath() {
     return std::filesystem::temp_directory_path() / "test_report.json"s;
@@ -43,27 +45,25 @@ class JsonReportTest : public ::testing::Test {
     }
 };
 
+class JsonReportFieldParameterizedTest
+    : public JsonReportTest,
+      public ::testing::WithParamInterface<std::string_view> {};
+
 TEST_F(JsonReportTest, WriteJsonReport_CreatesFile) {
     WriteJsonReport(MakeTotalStats(), TempJsonPath());
     EXPECT_TRUE(std::filesystem::exists(TempJsonPath()));
 }
 
-TEST_F(JsonReportTest, WriteJsonReport_FileContainsFilesCount) {
+TEST_P(JsonReportFieldParameterizedTest,
+       WriteJsonReport_ContainsExpectedFields) {
     WriteJsonReport(MakeTotalStats(), TempJsonPath());
-    EXPECT_NE(ReadFile(TempJsonPath()).find("file_count"s), std::string::npos);
+    const std::string content = ReadFile(TempJsonPath());
+    EXPECT_NE(content.find(std::string{GetParam()}), std::string::npos);
 }
 
-TEST_F(JsonReportTest, WriteJsonReport_FileContainsWordFrequency) {
-    WriteJsonReport(MakeTotalStats(), TempJsonPath());
-    EXPECT_NE(ReadFile(TempJsonPath()).find("word_frequency"s),
-              std::string::npos);
-}
-
-TEST_F(JsonReportTest, WriteJsonReport_FileContainsKeywordHits) {
-    WriteJsonReport(MakeTotalStats(), TempJsonPath());
-    EXPECT_NE(ReadFile(TempJsonPath()).find("keyword_hits"s),
-              std::string::npos);
-}
+INSTANTIATE_TEST_SUITE_P(JsonFields, JsonReportFieldParameterizedTest,
+                         ::testing::Values("file_count"sv, "word_frequency"sv,
+                                           "keyword_hits"sv, "per_file"sv));
 
 TEST_F(JsonReportTest, WriteJsonReport_EmptyStats_CreatesValidFile) {
     const TotalStats empty_stats;

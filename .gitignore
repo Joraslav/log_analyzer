@@ -64,7 +64,6 @@ compile_commands.json
 
 # VS Code folder
 .vscode/
-.github/
 
 # CMake files
 CMakeLists.txt.user

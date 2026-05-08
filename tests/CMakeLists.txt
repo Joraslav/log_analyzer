@@ -1,5 +1,6 @@
 FIND_LIB(GTest)
 include(GoogleTest)
+include(CTest)
 
 # ---------- Тесты ----------
 ADD_GTEST_TARGET(Test_FileScanner

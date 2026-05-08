@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -46,19 +47,23 @@ class FileScannerTest : public ::testing::Test {
     }
 };
 
+struct ExtensionCase {
+    std::string_view case_name;
+    std::string_view filename;
+    bool should_exist;
+};
+
+void PrintTo(const ExtensionCase& value, std::ostream* output) {
+    *output << value.case_name;
+}
+
+class FileScannerExtensionParameterizedTest
+    : public FileScannerTest,
+      public ::testing::WithParamInterface<ExtensionCase> {};
+
 TEST_F(FileScannerTest, ScanDirectory_ReturnsLogAndTxtFiles) {
     const auto results = ScanDirectory(SmallDir());
     EXPECT_FALSE(results.empty());
-}
-
-TEST_F(FileScannerTest, ScanDirectory_IncludesLogFiles) {
-    const auto results = ScanDirectory(SmallDir());
-    EXPECT_TRUE(ContainsFilename(results, "sample.log"sv));
-}
-
-TEST_F(FileScannerTest, ScanDirectory_IncludesTxtFiles) {
-    const auto results = ScanDirectory(SmallDir());
-    EXPECT_TRUE(ContainsFilename(results, "sample.txt"sv));
 }
 
 TEST_F(FileScannerTest, ScanDirectory_ExcludesNonSupportedExtensions) {
@@ -90,14 +95,22 @@ TEST_F(FileScannerTest, ScanDirectory_FindsFilesRecursively) {
     EXPECT_TRUE(ContainsFilename(results, "nested.log"sv));
 }
 
-TEST_F(FileScannerTest, ScanDirectory_IncludesUppercaseLogExtension) {
+TEST_P(FileScannerExtensionParameterizedTest,
+       ScanDirectory_ExtensionVariants_FindsExpectedFiles) {
     const auto results = ScanDirectory(SmallDir());
-    EXPECT_TRUE(ContainsFilename(results, "sample_upper.LOG"sv));
+    const auto [case_name, filename, should_exist] = GetParam();
+    (void)case_name;
+    EXPECT_EQ(ContainsFilename(results, filename), should_exist);
 }
 
-TEST_F(FileScannerTest, ScanDirectory_IncludesUppercaseTxtExtension) {
-    const auto results = ScanDirectory(SmallDir());
-    EXPECT_TRUE(ContainsFilename(results, "sample_upper.TXT"sv));
-}
+INSTANTIATE_TEST_SUITE_P(
+    ExtensionCoverage, FileScannerExtensionParameterizedTest,
+    ::testing::Values(ExtensionCase{"LowerLog"sv, "sample.log"sv, true},
+                      ExtensionCase{"LowerTxt"sv, "sample.txt"sv, true},
+                      ExtensionCase{"UpperLog"sv, "sample_upper.LOG"sv, true},
+                      ExtensionCase{"UpperTxt"sv, "sample_upper.TXT"sv, true},
+                      ExtensionCase{"UnsupportedCsv"sv, "ignored.csv"sv,
+                                    false}),
+    [](const auto& info) { return std::string{info.param.case_name}; });
 
 }  // namespace

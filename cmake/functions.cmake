@@ -60,5 +60,8 @@ function(ADD_GTEST_TARGET TEST_NAME)
 
     LOG_ANALYZER_CONFIGURE_TARGET(${TEST_NAME})
 
-    gtest_discover_tests(${TEST_NAME})
+    gtest_discover_tests(${TEST_NAME}
+        NO_PRETTY_VALUES
+        # NO_PRETTY_TYPES
+    )
 endfunction()

@@ -1,11 +1,14 @@
 #include "app/App.hpp"
+#include "app/Cli.hpp"
 #include "app/CliArgs.hpp"
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <filesystem>
 #include <fstream>
 #include <optional>
+#include <span>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -16,6 +19,7 @@ using namespace std::string_view_literals;
 using namespace std::string_literals;
 
 using app::CliArgs;
+using app::ParseArgs;
 
 constexpr std::string_view kDataDir{TEST_DATA_DIR};
 
@@ -74,6 +78,18 @@ TEST_F(AppTest, Run_SmallDirWithKeywords_ReturnsZero) {
     EXPECT_EQ(app::Run(args, output), 0);
 }
 
+TEST_F(AppTest, Run_DirectoryWithoutSupportedFiles_ReturnsZero) {
+    const CliArgs args{
+        .root_dir = DataPath("edge_cases"sv),
+        .keywords = {},
+        .json_output = std::nullopt,
+    };
+    EXPECT_EQ(app::Run(args, output), 0);
+    const std::string out = output.str();
+    EXPECT_NE(out.find("Files analyzed"sv), std::string::npos);
+    EXPECT_NE(out.find("0"sv), std::string::npos);
+}
+
 // ---------------------------------------------------------------------------
 // JSON-вывод
 // ---------------------------------------------------------------------------
@@ -122,16 +138,17 @@ TEST_F(AppTest, Run_NonExistentDir_ReturnsOne) {
 // Нормализованные keywords (end-to-end)
 // ---------------------------------------------------------------------------
 
-TEST_F(AppTest, Run_WithUppercaseKeywords_NormalizesAndMatches) {
-    const CliArgs args{
-        .root_dir = DataPath("small"sv),
-        .keywords = {"ERROR"s, "WARN"s},  // uppercase input
-        .json_output = std::nullopt,
-    };
+TEST_F(AppTest, Run_WithUppercaseKeywordsFromCli_NormalizesAndMatches) {
+    const std::string root_dir = DataPath("small"sv).string();
+    const std::array<std::string_view, 3> argv = {
+        std::string_view{root_dir}, "--keywords"sv, "ERROR, WARN"sv};
+    const CliArgs args = ParseArgs(std::span<const std::string_view>{argv});
     EXPECT_EQ(app::Run(args, output), 0);
+
     const std::string out = output.str();
-    // Если keywords нормализованы, они должны найти совпадения
     EXPECT_NE(out.find("Keyword hits"sv), std::string::npos);
+    EXPECT_NE(out.find("error: 1"sv), std::string::npos);
+    EXPECT_NE(out.find("warn: 1"sv), std::string::npos);
 }
 
 // ---------------------------------------------------------------------------
