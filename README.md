@@ -6,8 +6,8 @@
 
 | Платформа | Пакет |
 | --- | --- |
-| ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white) Ubuntu / Debian (amd64) | [log_analyzer_0.1.2_amd64.deb](https://github.com/Joraslav/log_analyzer/releases/download/v0.2.0/log_analyzer_0.2.0_amd64.deb) |
-| ![Fedora](https://img.shields.io/badge/Fedora-51A2DA?logo=fedora&logoColor=white) Fedora / RHEL (x86\_64) | [log_analyzer-0.1.2-1.x86_64.rpm](https://github.com/Joraslav/log_analyzer/releases/download/v0.2.0/log_analyzer-0.2.0-1.x86_64.rpm) |
+| ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white) Ubuntu / Debian (amd64) | [log_analyzer_0.2.0_amd64.deb](https://github.com/Joraslav/log_analyzer/releases/download/v0.2.0/log_analyzer_0.2.0_amd64.deb) |
+| ![Fedora](https://img.shields.io/badge/Fedora-51A2DA?logo=fedora&logoColor=white) Fedora / RHEL (x86\_64) | [log_analyzer-0.2.0-1.x86_64.rpm](https://github.com/Joraslav/log_analyzer/releases/download/v0.2.0/log_analyzer-0.2.0-1.x86_64.rpm) |
 
 [Все релизы →](https://github.com/Joraslav/log_analyzer/releases)
 
