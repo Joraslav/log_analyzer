@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31.0)
-project(log_analyzer VERSION 0.1.2 LANGUAGES C CXX)
+project(log_analyzer VERSION 0.2.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

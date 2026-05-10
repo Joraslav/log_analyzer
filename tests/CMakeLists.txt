@@ -55,3 +55,12 @@ ADD_GTEST_TARGET(Test_App
     COMPILE_DEFINITIONS
         TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data"
 )
+
+ADD_GTEST_TARGET(Test_Concurrency
+    LINK_LIBS
+        lib_concurrency
+        lib_app
+        lib_domain
+    COMPILE_DEFINITIONS
+        TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data"
+)

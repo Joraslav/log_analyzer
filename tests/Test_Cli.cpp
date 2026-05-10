@@ -136,7 +136,9 @@ INSTANTIATE_TEST_SUITE_P(
         InvalidCliArgsCase{"KeywordsWithoutValue"sv,
                            {"/tmp/logs"sv, "--keywords"sv}},
         InvalidCliArgsCase{"JsonWithoutValue"sv, {"/tmp/logs"sv, "--json"sv}}),
-    [](const auto& info) { return std::string{info.param.case_name}; });
+    [](const auto& param_info) {
+        return std::string{param_info.param.case_name};
+    });
 
 // ---------------------------------------------------------------------------
 // Граничные случаи

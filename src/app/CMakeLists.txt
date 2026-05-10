@@ -14,6 +14,7 @@ target_link_libraries(lib_app PUBLIC
     lib_io
     lib_analysis
     lib_report
+    lib_concurrency
 )
 
 LOG_ANALYZER_CONFIGURE_TARGET(lib_app)

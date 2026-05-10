@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <filesystem>
-#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -52,10 +51,6 @@ struct ExtensionCase {
     std::string_view filename;
     bool should_exist;
 };
-
-void PrintTo(const ExtensionCase& value, std::ostream* output) {
-    *output << value.case_name;
-}
 
 class FileScannerExtensionParameterizedTest
     : public FileScannerTest,
@@ -111,6 +106,8 @@ INSTANTIATE_TEST_SUITE_P(
                       ExtensionCase{"UpperTxt"sv, "sample_upper.TXT"sv, true},
                       ExtensionCase{"UnsupportedCsv"sv, "ignored.csv"sv,
                                     false}),
-    [](const auto& info) { return std::string{info.param.case_name}; });
+    [](const auto& param_info) {
+        return std::string{param_info.param.case_name};
+    });
 
 }  // namespace

@@ -99,5 +99,19 @@ If:
   PathMatch: (.*\/)?tests\/Test_App\.cpp$
 Diagnostics:
   Suppress:
+    - missing-includes
     - misc-non-private-member-variables-in-classes
+
+---
+If:
+  PathMatch: (.*\/)?src\/concurrency\/ThreadPool\.cpp$
+Diagnostics:
+  Suppress:
+    - missing-includes
+
+---
+If:
+  PathMatch: (.*\/)?tests\/Test_Concurrency\.cpp$
+Diagnostics:
+  Suppress:
     - missing-includes

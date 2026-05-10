@@ -60,8 +60,8 @@ using domain::Keywords;
 CliArgs ParseArgs(std::span<const std::string_view> args) {
     if (args.empty()) {
         throw std::invalid_argument{
-            "Usage: log_analyzer <root_dir> [--keywords w1,w2] [--json "
-            "<path>]"};
+            "Usage: log_analyzer <root_dir> [--keywords w1,w2] [--json <path>] "
+            "[--threads N]"};
     }
 
     CliArgs result;
@@ -83,6 +83,19 @@ CliArgs ParseArgs(std::span<const std::string_view> args) {
                 throw std::invalid_argument{"--json requires a path"};
             }
             result.json_output = std::string{*it};
+        } else if (flag == "--threads") {
+            ++it;
+            if (it == tail.end()) {
+                throw std::invalid_argument{"--threads requires a value"};
+            }
+            try {
+                result.thread_count = std::stoul(std::string{*it});
+            } catch (const std::invalid_argument&) {
+                throw std::invalid_argument{
+                    "--threads requires a numeric value"};
+            } catch (const std::out_of_range&) {
+                throw std::invalid_argument{"--threads value is out of range"};
+            }
         } else {
             throw std::invalid_argument{"Unknown argument: " +
                                         std::string{flag}};

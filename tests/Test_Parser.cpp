@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include <ostream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -20,10 +19,6 @@ struct TokenizeCase {
     std::string_view input;
     std::vector<std::string> expected;
 };
-
-void PrintTo(const TokenizeCase& value, std::ostream* output) {
-    *output << value.case_name;
-}
 
 class ParserParameterizedTest
     : public ParserTest,
@@ -55,6 +50,8 @@ INSTANTIATE_TEST_SUITE_P(
                                    {"error-code"s, "can't"s, "v1.2.3"s}},
                       TokenizeCase{"EmptyInput"sv, ""sv, {}},
                       TokenizeCase{"WhitespaceOnlyInput"sv, "  \t\n  "sv, {}}),
-    [](const auto& info) { return std::string{info.param.case_name}; });
+    [](const auto& param_info) {
+        return std::string{param_info.param.case_name};
+    });
 
 }  // namespace

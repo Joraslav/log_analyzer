@@ -53,6 +53,7 @@ TEST_F(AppTest, Run_SmallDir_ReturnsZero) {
         .root_dir = DataPath("small"sv),
         .keywords = {},
         .json_output = std::nullopt,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 0);
 }
@@ -62,6 +63,7 @@ TEST_F(AppTest, Run_SmallDir_OutputContainsTotals) {
         .root_dir = DataPath("small"sv),
         .keywords = {},
         .json_output = std::nullopt,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 0);
     const std::string out = output.str();
@@ -74,6 +76,7 @@ TEST_F(AppTest, Run_SmallDirWithKeywords_ReturnsZero) {
         .root_dir = DataPath("small"sv),
         .keywords = {"error"s, "warn"s},
         .json_output = std::nullopt,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 0);
 }
@@ -83,6 +86,7 @@ TEST_F(AppTest, Run_DirectoryWithoutSupportedFiles_ReturnsZero) {
         .root_dir = DataPath("edge_cases"sv),
         .keywords = {},
         .json_output = std::nullopt,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 0);
     const std::string out = output.str();
@@ -102,6 +106,7 @@ TEST_F(AppJsonTest, Run_WithJsonOutput_CreatesFile) {
         .root_dir = DataPath("small"sv),
         .keywords = {},
         .json_output = json_path,
+        .thread_count = std::nullopt,
     };
     ASSERT_EQ(app::Run(args, output), 0);
     EXPECT_TRUE(std::filesystem::exists(json_path));
@@ -115,6 +120,7 @@ TEST_F(AppJsonTest, Run_WithJsonOutput_FileIsNonEmpty) {
         .root_dir = DataPath("small"sv),
         .keywords = {},
         .json_output = json_path,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 0);
     const std::ifstream ifs{json_path};
@@ -130,6 +136,7 @@ TEST_F(AppTest, Run_NonExistentDir_ReturnsOne) {
         .root_dir = "/nonexistent/path/that/does/not/exist"s,
         .keywords = {},
         .json_output = std::nullopt,
+        .thread_count = std::nullopt,
     };
     EXPECT_EQ(app::Run(args, output), 1);
 }
@@ -163,6 +170,7 @@ TEST_F(AppJsonTest, Run_WithJsonOutput_ContainsKeywordHits) {
         .root_dir = DataPath("small"sv),
         .keywords = {"error"s, "warn"s},
         .json_output = json_path,
+        .thread_count = std::nullopt,
     };
     ASSERT_EQ(app::Run(args, output), 0);
     EXPECT_TRUE(std::filesystem::exists(json_path));
