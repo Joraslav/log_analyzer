@@ -63,8 +63,11 @@ cmake --build build
 ### 3. Запуск
 
 ```bash
-./build/log_analyzer <директория> [--keywords слово1,слово2,...] [--json <путь>]
+./build/log_analyzer <директория> [--keywords слово1,слово2,...] [--json <путь>] [--threads <N>]
 ```
+
+По умолчанию анализ выполняется в одном потоке. Для параллельного анализа файлов
+используйте `--threads <N>`.
 
 **Примеры:**
 
@@ -74,6 +77,12 @@ cmake --build build
 
 # Искать ключевые слова "error" и "warning", сохранить JSON
 ./build/log_analyzer logs/ --keywords error,warning --json report.json
+
+# Параллельный анализ в 8 потоков
+./build/log_analyzer logs/ --threads 8
+
+# Параллельный анализ + ключевые слова + JSON
+./build/log_analyzer logs/ --keywords error,warning --threads 8 --json report.json
 ```
 
 ## Аргументы командной строки
@@ -83,6 +92,7 @@ cmake --build build
 | `<root_dir>` | Да | Корневая директория для сканирования |
 | `--keywords word1,word2,...` | Нет | Список ключевых слов через запятую (без пробелов) |
 | `--json <path>` | Нет | Путь к выходному JSON-файлу |
+| `--threads <N>` | Нет | Количество потоков для параллельного анализа файлов |
 
 ## Пример вывода
 
@@ -113,15 +123,19 @@ Total chars    : 61200
 ### Пайплайн обработки
 
 ```planetext
-CLI args → FileScanner → FileAnalyzer (×N файлов) → Aggregator → ConsoleReport
-                                                                 └→ JsonReport
+CLI args → FileScanner → (single-thread: FileAnalyzer ×N → Aggregator)
+             → (multi-thread: ThreadPool(N) → FileAnalyzer ×N → ThreadSafeAggregator)
+                                        ↓
+                                      ConsoleReport
+                                        └→ JsonReport
 ```
 
 1. `FileScanner` — рекурсивно находит `.log`/`.txt` файлы
 2. `FileAnalyzer` — читает файл построчно, токенизирует через `Tokenizer`, собирает `FileStats`
-3. `Aggregator` — суммирует все `FileStats` в `TotalStats`
-4. `ConsoleReport` — печатает сводку в `std::ostream`
-5. `JsonReport` — сериализует `TotalStats` в JSON через glaze
+3. `Aggregator` — суммирует все `FileStats` в `TotalStats` в однопоточном режиме
+4. `ThreadPool` + `ThreadSafeAggregator` — выполняют параллельный анализ и потокобезопасную агрегацию при использовании `--threads`
+5. `ConsoleReport` — печатает сводку в `std::ostream`
+6. `JsonReport` — сериализует `TotalStats` в JSON через glaze
 
 ## Тесты
 
