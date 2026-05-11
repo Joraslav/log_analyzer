@@ -43,6 +43,12 @@ mapfile -t cpp_files < <(
 			   -o -name "*.hpp" -o -name "*.hh" -o -name "*.hxx" -o -name "*.h" \)
 	fi
 
+	if [ -d "./bench" ]; then
+		find ./bench -type f \
+			\( -name "*.cpp" -o -name "*.cc" -o -name "*.cxx" -o -name "*.c" \
+			   -o -name "*.hpp" -o -name "*.hh" -o -name "*.hxx" -o -name "*.h" \)
+	fi
+
 	if [ -f "./main.cpp" ]; then
 		echo "./main.cpp"
 	fi

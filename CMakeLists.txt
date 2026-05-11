@@ -41,5 +41,11 @@ install(FILES ${CMAKE_SOURCE_DIR}/README.md
 enable_testing()
 add_subdirectory(tests)
 
+# ---------- Бенчмарки ----------
+option(LOG_ANALYZER_BUILD_BENCHMARKS "Build benchmarks" ON)
+if(LOG_ANALYZER_BUILD_BENCHMARKS)
+	add_subdirectory(bench)
+endif()
+
 # ---------- Пакетирование ----------
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Packaging.cmake)
